@@ -3,7 +3,7 @@
   "name": "",
   "icons": [{
     "src": "icon.png",
-    "type": "image/png",
+    "type": "img/8ball.jpeg",
     "sizes": "192x192"
   }],
   "start_url": "/?utm_source=homescreen",
