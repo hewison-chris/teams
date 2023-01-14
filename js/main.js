@@ -24,9 +24,9 @@ function schedule(event) {
     twoTeamBars.innerText = `Bars with two teams: ${bars.barsWithTwoTeams().toString()}`;
     const teamLetters = document.getElementById("teamLetters");
     teamLetters.innerText = `Teams: ${teams.toString()}`;
-    const scheduleWeeks = document.getElementById("scheduleWeeks");
-    while (scheduleWeeks.firstChild) {
-        scheduleWeeks.removeChild(scheduleWeeks.firstChild);
+    const results = document.getElementById("results");
+    while (results.firstChild) {
+        results.removeChild(results.firstChild);
     }
     console.log("Schedule...");
     const schedule = new Schedule(bars, teams, matchCount);
@@ -34,12 +34,17 @@ function schedule(event) {
     schedule.weeks.forEach(week => {
         let weekHeader = document.createElement("h2");
         weekHeader.innerText = `WEEK ${week.weekNumber().toString()}`;
-        scheduleWeeks.appendChild(weekHeader);
+        results.appendChild(weekHeader);
         week.matches.forEach(match => {
-            let item = document.createElement("li");
+            let item = document.createElement("h3");
             item.appendChild(document.createTextNode(match.toString()));
-            scheduleWeeks.appendChild(item);
+            results.appendChild(item);
         });
+    });
+    teams.teams.forEach(team => {
+        let stats = document.createElement("h3");
+        stats.innerText = `Team ${team} to play ${team.homeCount} home matches and total of ${team.matchCount} matches`;
+        results.appendChild(stats);
     });
 }
 //# sourceMappingURL=main.js.map
