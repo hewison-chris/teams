@@ -25,9 +25,10 @@ function schedule(event) {
     const teamLetters = document.getElementById("teamLetters");
     teamLetters.innerText = `Teams: ${teams.toString()}`;
     const results = document.getElementById("results");
-    while (results.firstChild) {
-        results.removeChild(results.firstChild);
-    }
+    if (results !== null)
+        while (results.firstChild) {
+            results.removeChild(results.firstChild);
+        }
     console.log("Schedule...");
     const schedule = new Schedule(bars, teams, matchCount);
     schedule.calculate();
