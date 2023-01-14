@@ -36,13 +36,25 @@ export class Schedule {
       this.weeks.push(new Week(week))
       const homeBars = (week % 2 === 0) ? this.bars.bars : this.bars.bars.slice().reverse()
       homeBars.forEach(bar => {
-        const homeTeam = bar.pickTeam(awayTeams, this.targetMatches)
+        const homeTeam = bar.pickHomeTeam(awayTeams, this.targetMatches)
         if (homeTeam !== null) {
           homeTeams.push(homeTeam)
           console.log(`picked home team ${homeTeam}`)
           const awayTeam = this.teams.pickAwayTeam(homeTeam, homeTeams, awayTeams, this.targetMatches)
           if (awayTeam === null) {
             homeTeams.splice(homeTeams.findIndex(t => t.toString() === homeTeam.toString()))
+            const otherHomeTeam = bar.pickOtherHomeTeam(homeTeam, awayTeams, this.targetMatches)
+            if (otherHomeTeam !== null) {
+              homeTeams.push(homeTeam)
+              console.log(`picked other home team ${homeTeam}`)
+              const anotherAwayTeam = this.teams.pickAwayTeam(otherHomeTeam, homeTeams, awayTeams, this.targetMatches)
+              if (anotherAwayTeam === null) {
+                homeTeams.splice(homeTeams.findIndex(t => t.toString() === otherHomeTeam.toString()))
+              } else {
+                awayTeams.push(anotherAwayTeam)
+                this.weeks[week].matches.push(new Match(otherHomeTeam, anotherAwayTeam))
+              }
+            }
           } else {
             awayTeams.push(awayTeam)
             this.weeks[week].matches.push(new Match(homeTeam, awayTeam))
@@ -82,7 +94,7 @@ export class Schedule {
       }
     })
     this.teams.teams.forEach(team => {
-      console.log(`Team ${team} played ${team.matchCount} matches`)
+      console.log(`Team ${team} played ${team.homeCount} home matches and total of ${team.matchCount} matches`)
     })
     return completed
   }

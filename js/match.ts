@@ -8,7 +8,9 @@ export class Match {
     this.homeTeam = homeTeam
     this.awayTeam = awayTeam
     homeTeam.matchCount++
+    homeTeam.homeCount++
     awayTeam.matchCount++
+    awayTeam.awayCount++
   }
 
   toString() {

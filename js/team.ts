@@ -6,6 +6,8 @@ export class Team {
   roundRobin: Team[] = []
   roundRobinComplete = false
   matchCount = 0
+  homeCount = 0
+  awayCount = 0
 
   constructor(bar: Bar) {
     this.bar = bar

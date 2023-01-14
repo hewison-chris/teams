@@ -4,6 +4,8 @@ export class Team {
     roundRobin = [];
     roundRobinComplete = false;
     matchCount = 0;
+    homeCount = 0;
+    awayCount = 0;
     constructor(bar) {
         this.bar = bar;
         bar.addTeam(this);

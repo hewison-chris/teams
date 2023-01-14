@@ -14,12 +14,10 @@ export class Teams {
     toString() {
         return this.teams.map(team => team.toString());
     }
-    pickTeam() {
-        return this.teams[random(this.count)];
-    }
     pickAwayTeam(homeTeam, homeTeams, awayTeams, matchTarget) {
         const teamsToPlay = this.teams
             .filter(team => team.matchCount < matchTarget)
+            .filter(team => team.awayCount < matchTarget / 2)
             .filter(team => !homeTeams.includes(team))
             .filter(team => !awayTeams.includes(team))
             .filter(team => homeTeam.roundRobin.includes(team));
