@@ -41,12 +41,9 @@ export class Schedule {
                         awayTeams.push(awayTeam);
                         this.weeks[week].matches.push(new Match(homeTeam, awayTeam));
                     }
-                    console.log(this.weeks[week].toString());
-                }
-                if (week === maxWeeks) {
-                    alert("Failed to calculate. Try again.");
                 }
             });
+            // console.log(this.weeks[week].toString())
             if (roundRobinCompleted) {
                 matchesCompleted = this.targetMatchCountReached();
             }
