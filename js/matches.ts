@@ -50,7 +50,7 @@ export class Schedule {
           console.log(this.weeks[week].toString())
         }
         if (week === maxWeeks) {
-          alert("Failed to calculate. Try again.")
+          alert("Failed to calculate within 52 weeks due to unlucky randomness. Try again.")
         }
       })
       if (roundRobinCompleted) {
