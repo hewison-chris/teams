@@ -30,8 +30,10 @@ export class Teams {
       console.log(`No teams left to play against team ${homeTeam}`)
       return null
     }
-    console.log(`Home team ${homeTeam.toString()}: choose from ${teamsToPlay}`)
-    const picked = teamsToPlay[random(teamsToPlay.length)]
+    const minAwayPlaysTeams = teamsToPlay.filter(team => team.awayCount <= teamsToPlay.map(t => t.awayCount)
+      .reduce((min, current) => current < min ? current : min, matchTarget / 2))
+    console.log(`Home team ${homeTeam.toString()}: choose from ${minAwayPlaysTeams}`)
+    const picked: Team = minAwayPlaysTeams[random(minAwayPlaysTeams.length)]
     console.log(`Picked away team ${picked.toString()}`)
     homeTeam.removeTeamToPlay(picked)
     picked.removeTeamToPlay(homeTeam)

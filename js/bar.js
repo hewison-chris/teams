@@ -24,6 +24,12 @@ export class Bar {
         if (chooseFrom.length === 0) {
             return null;
         }
+        if (chooseFrom.length === 2) {
+            if (chooseFrom[0].homeCount < chooseFrom[1].homeCount)
+                return chooseFrom[0];
+            else
+                return chooseFrom[1];
+        }
         return chooseFrom[random(chooseFrom.length)];
     }
     pickOtherHomeTeam(homeTeam, awayTeams, matchTarget) {
