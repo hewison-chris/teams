@@ -1,5 +1,4 @@
 import {Bars} from "./bars.js"
-import {random} from "./random.js"
 import {Team} from "./team.js"
 
 export class Teams {
@@ -16,27 +15,36 @@ export class Teams {
   }
 
   toString() {
-    return this.teams.map(team => team.toString())
+    return this.teams.map(team => team.id())
   }
 
   pickAwayTeam(homeTeam: Team, homeTeams: Team[], awayTeams: Team[], matchTarget: number): Team {
-    const teamsToPlay = this.teams
-      .filter(team => team.matchCount < matchTarget)
-      .filter(team => team.awayCount < matchTarget / 2)
+    const teamsNotPlayingThisWeekYet = this.teams
       .filter(team => !homeTeams.includes(team))
       .filter(team => !awayTeams.includes(team))
+      .filter(team => team.matchCount() < matchTarget)
+    console.log(`Teams not yet playing this week: ${teamsNotPlayingThisWeekYet}`)
+    console.log(`Pick away team to play ${homeTeam} from robin1:${homeTeam.roundRobin.toString()}`)
+    let teamsToPlay = teamsNotPlayingThisWeekYet
       .filter(team => homeTeam.roundRobin.includes(team))
+      .sort((a, b) => a.matchCount() - b.matchCount())
+      .sort((a, b) => a.awayCount() - b.awayCount())
     if (teamsToPlay.length === 0) {
-      console.log(`No teams left to play against team ${homeTeam}`)
+      console.log(`Pick away team to play ${homeTeam} from robin2:${homeTeam.roundRobin2.toString()}`)
+      teamsToPlay = teamsNotPlayingThisWeekYet
+        .filter(team => homeTeam.roundRobin2.includes(team))
+        .sort((a, b) => -b.matchCount())
+        .sort((a, b) => a.matchCount() - b.matchCount())
+        .sort((a, b) => a.awayCount() - b.awayCount())
+      console.log(`Try choose from ${teamsToPlay}`)
+    }
+    if (teamsToPlay.length === 0) {
+      console.log(`No teams to select`)
       return null
     }
-    const minAwayPlaysTeams = teamsToPlay.filter(team => team.awayCount <= teamsToPlay.map(t => t.awayCount)
-      .reduce((min, current) => current < min ? current : min, matchTarget / 2))
-    console.log(`Home team ${homeTeam.toString()}: choose from ${minAwayPlaysTeams}`)
-    const picked: Team = minAwayPlaysTeams[random(minAwayPlaysTeams.length)]
+    console.log(`Home team ${homeTeam.toString()}: choose from ${teamsToPlay}`)
+    const picked: Team = teamsToPlay[0]
     console.log(`Picked away team ${picked.toString()}`)
-    homeTeam.removeTeamToPlay(picked)
-    picked.removeTeamToPlay(homeTeam)
     return picked
   }
 }

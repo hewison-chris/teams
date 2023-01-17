@@ -9,11 +9,11 @@ function schedule(event) {
   event.preventDefault()
   const formData = new FormData(event.target)
   const values = Object.fromEntries(formData)
-  const barCount = parseInt(<string>values.bars)
-  const teamCount = parseInt(<string>values.teams)
+  const barCount = parseInt(<string>values.barCount)
+  const teamCount = parseInt(<string>values.teamCount)
   if (teamCount > 2 * barCount) alert("Only a maximum of two teams per bar is supported!")
   if (teamCount < barCount) alert("There needs to be at least one team per bar!")
-  const matchCount = parseInt(<string>values.matches)
+  const weekCount = parseInt(<string>values.weekCount)
   const barLetters = document.getElementById("barLetters")
   const bars = new Bars(barCount)
   barLetters.innerText = `Bars: ${bars.toString()}`
@@ -30,8 +30,8 @@ function schedule(event) {
       results.removeChild(results.firstChild)
     }
   console.log("Schedule...")
-  const schedule = new Schedule(bars, teams, matchCount)
-  schedule.calculate()
+  const schedule = new Schedule(bars, teams, weekCount)
+  schedule.makeSchedule()
   schedule.weeks.forEach(week => {
     let weekHeader = document.createElement("h2")
     weekHeader.innerText = `WEEK ${week.weekNumber().toString()}`
@@ -42,9 +42,15 @@ function schedule(event) {
       results.appendChild(item)
     })
   })
-  teams.teams.forEach(team => {
+  teams.teams.forEach(t => {
     let stats = document.createElement("h3")
-    stats.innerText = `Team ${team} to play ${team.homeCount} home matches and total of ${team.matchCount} matches`
+    let statsHome = document.createElement("p")
+    let statsAway = document.createElement("p")
+    stats.innerText = `${t} plays ${t.matchCount()} matches: ${t.homeCount()} home and and ${t.awayCount()} away`
+    statsHome.innerText = `HOME: ${t.homeMatches()}`
+    statsAway.innerText = `AWAY: ${t.awayMatches()}`
     results.appendChild(stats)
+    results.appendChild(statsHome)
+    results.appendChild(statsAway)
   })
 }

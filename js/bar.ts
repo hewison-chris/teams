@@ -1,9 +1,9 @@
-import {random} from "./random.js"
 import {Team} from "./team.js"
 
 export class Bar {
   name: string
   teams: Team[] = []
+  matchCount: number = 0
 
   constructor(name: string) {
     this.name = name
@@ -27,17 +27,14 @@ export class Bar {
 
   pickHomeTeam(awayTeams: Team[], matchTarget: number): Team {
     const chooseFrom = this.teams
-      .filter(team => team.homeCount < matchTarget / 2)
+      .filter(team => team.homeCount() < matchTarget / 2)
       .filter(team => !awayTeams.includes(team))
+      .slice()
+      .sort((a, b) => a.homeCount() - b.homeCount())
     if (chooseFrom.length === 0) {
       return null
     }
-    if (chooseFrom.length === 2) {
-      if (chooseFrom[0].homeCount < chooseFrom[1].homeCount)
-        return chooseFrom[0]
-      else return chooseFrom[1]
-    }
-    return chooseFrom[random(chooseFrom.length)]
+    return chooseFrom[0]
   }
 
   pickOtherHomeTeam(homeTeam: Team, awayTeams: Team[], matchTarget: number): Team {
@@ -46,7 +43,7 @@ export class Bar {
     }
     const chooseFrom = this.teams
       .filter(team => team.index !== homeTeam.index)
-      .filter(team => team.homeCount < matchTarget / 2)
+      .filter(team => team.homeCount() < matchTarget / 2)
       .filter(team => !awayTeams.includes(team))
     if (chooseFrom.length === 0) {
       return null

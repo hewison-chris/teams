@@ -1,19 +1,19 @@
 import {Team} from "./team.js"
+import {Week} from "./week.js"
 
 export class Match {
   homeTeam: Team
   awayTeam: Team
+  week: Week
 
-  constructor(homeTeam: Team, awayTeam: Team) {
+  constructor(homeTeam: Team, awayTeam: Team, week: Week) {
     this.homeTeam = homeTeam
     this.awayTeam = awayTeam
-    homeTeam.matchCount++
-    homeTeam.homeCount++
-    awayTeam.matchCount++
-    awayTeam.awayCount++
+    this.week = week
+    homeTeam.addMatch(this)
   }
 
   toString() {
-    return `Bar ${this.homeTeam.bar.toString()} : ${this.homeTeam.toString()} vs ${this.awayTeam.toString()}`
+    return `${this.awayTeam.id()} at ${this.homeTeam.id()}`
   }
 }
