@@ -26,10 +26,9 @@ export class Bar {
   }
 
   pickHomeTeam(awayTeams: Team[], matchTarget: number): Team {
-    const chooseFrom = this.teams
-      .filter(team => team.homeCount() < matchTarget / 2)
+    const chooseFrom = this.teams.slice()
       .filter(team => !awayTeams.includes(team))
-      .slice()
+      .filter(team => team.homeCount() < matchTarget / 2)
       .sort((a, b) => a.homeCount() - b.homeCount())
     if (chooseFrom.length === 0) {
       return null

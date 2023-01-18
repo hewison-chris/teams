@@ -35,28 +35,29 @@ export class Schedule {
       let awayTeams: Team[] = []
       this.weeks.push(new Week(week))
       const homeBars = this.bars.bars.slice().sort((a, b) => a.matchCount - b.matchCount)
-      console.log(`bars=${homeBars.toString()}`)
+      console.log(`home bars=${homeBars.toString()}`)
       homeBars.forEach(bar => {
-        const homeTeam = bar.pickHomeTeam(awayTeams, this.weekCount)
-        if (homeTeam !== null) {
-          homeTeams.push(homeTeam)
+        let homeTeam = bar.pickHomeTeam(awayTeams, this.weekCount)
+        if (homeTeam === null) {
+          console.log(`No team left for home bar ${bar}`)
+        } else {
           console.log(`picked home team ${homeTeam}`)
           const awayTeam = this.teams.pickAwayTeam(homeTeam, homeTeams, awayTeams, this.weekCount)
           if (awayTeam === null) {
-            homeTeams.splice(homeTeams.findIndex(t => t.toString() === homeTeam.toString()))
-            const otherHomeTeam = bar.pickOtherHomeTeam(homeTeam, awayTeams, this.weekCount)
-            if (otherHomeTeam !== null) {
-              homeTeams.push(homeTeam)
-              console.log(`picked other home team ${otherHomeTeam}`)
-              const anotherAwayTeam = this.teams.pickAwayTeam(otherHomeTeam, homeTeams, awayTeams, this.weekCount)
-              if (anotherAwayTeam === null) {
-                homeTeams.splice(homeTeams.findIndex(t => t.toString() === otherHomeTeam.toString()))
-              } else {
+            homeTeam = bar.pickOtherHomeTeam(homeTeam, awayTeams, this.weekCount)
+            if (homeTeam === null) {
+              console.log(`No team left for home bar ${bar}`)
+            } else {
+              console.log(`picked other home team ${homeTeam}`)
+              const anotherAwayTeam = this.teams.pickAwayTeam(homeTeam, homeTeams, awayTeams, this.weekCount)
+              if (anotherAwayTeam !== null) {
+                homeTeams.push(homeTeam)
                 awayTeams.push(anotherAwayTeam)
-                this.weeks[week].matches.push(new Match(otherHomeTeam, anotherAwayTeam, this.weeks[week]))
+                this.weeks[week].matches.push(new Match(homeTeam, anotherAwayTeam, this.weeks[week]))
               }
             }
           } else {
+            homeTeams.push(homeTeam)
             awayTeams.push(awayTeam)
             this.weeks[week].matches.push(new Match(homeTeam, awayTeam, this.weeks[week]))
           }

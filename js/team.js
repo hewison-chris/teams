@@ -29,10 +29,10 @@ export class Team {
         }
     }
     homeMatches() {
-        return this.matches.filter(m => m.homeTeam.id() === this.id()).map(m => m.awayTeam.id());
+        return this.matches.filter(m => m.homeTeam.id() === this.id());
     }
     awayMatches() {
-        return this.matches.filter(m => m.awayTeam.id() === this.id()).map(m => m.homeTeam.id());
+        return this.matches.filter(m => m.awayTeam.id() === this.id());
     }
     homeCount() {
         return this.homeMatches().length;

@@ -47,8 +47,8 @@ function schedule(event) {
     let statsHome = document.createElement("p")
     let statsAway = document.createElement("p")
     stats.innerText = `${t} plays ${t.matchCount()} matches: ${t.homeCount()} home and and ${t.awayCount()} away`
-    statsHome.innerText = `HOME: ${t.homeMatches()}`
-    statsAway.innerText = `AWAY: ${t.awayMatches()}`
+    statsHome.innerText = `HOME: ${t.homeMatches().map(m => m.awayTeam.id())}`
+    statsAway.innerText = `AWAY: ${t.awayMatches().map(m => m.homeTeam.id())}`
     results.appendChild(stats)
     results.appendChild(statsHome)
     results.appendChild(statsAway)
