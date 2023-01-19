@@ -62,7 +62,7 @@ export class Teams {
       return null
     }
     console.log(`Home team ${homeTeam.toString()}: choose from ${teamsToPlay}`)
-    const picked: Team = teamsToPlay[random(teamsToPlay.length - 1)]
+    const picked: Team = teamsToPlay[random(teamsToPlay.length)]
     console.log(`Picked away team ${picked.toString()}`)
     return picked
   }

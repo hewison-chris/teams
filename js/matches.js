@@ -17,25 +17,20 @@ export class Schedule {
         this.bars.reset();
         this.teams.reset();
         this.teams.teams.forEach(team => team.addTeamsToPlay(this.teams.teams, this.weekCount));
-        this.teams.teams.forEach(t => {
-            console.log(t.debug());
-        });
     }
     makeSchedule() {
-        let attempts = 0;
-        do {
+        let attempt = 0;
+        while (attempt < this.maxAttempts && !this.calculate()) {
+            console.warn(`Attempt ${attempt}`);
             this.reset();
-            attempts++;
-        } while (attempts < this.maxAttempts && !this.calculate());
-        if (attempts >= this.maxAttempts) {
-            console.error(`Failed to make schedule with equal number of matches after ${attempts} attempts`);
-            this.teams.teams.forEach(t => {
-                console.log(t.debug());
-            });
+            attempt++;
+        }
+        if (attempt >= this.maxAttempts) {
+            console.error(`Failed to make schedule with equal number of matches after ${attempt} attempts`);
             return false;
         }
         else {
-            console.error(`Succeeded to make schedule after ${attempts} attempts`);
+            console.error(`Succeeded to make schedule after ${attempt} attempts`);
             return true;
         }
     }
@@ -78,14 +73,17 @@ export class Schedule {
                         this.weeks[week].matches.push(new Match(homeTeam, awayTeam, this.weeks[week]));
                     }
                 }
-                if (this.weeks[week].matches.length < this.teams.count / 2) {
-                    console.error("FAILED this attempt");
-                    return false;
-                }
             });
+            if (this.weeks[week].matches.length < this.teams.count / 2) {
+                this.teams.teams.forEach(t => {
+                    console.log(t.debug());
+                });
+                console.error("FAILED this attempt");
+                return false;
+            }
             console.log(this.weeks[week].toString());
-            return true;
         }
+        return true;
     }
 }
 //# sourceMappingURL=matches.js.map

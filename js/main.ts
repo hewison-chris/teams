@@ -15,6 +15,8 @@ function schedule(event) {
   if (teamCount > 2 * barCount) alert("Only a maximum of two teams per bar is supported!")
   if (teamCount < barCount) alert("There needs to be at least one team per bar!")
   const weekCount = parseInt(<string>values.weekCount)
+  const submitButton = document.getElementById("submitButton") as HTMLButtonElement
+  submitButton.disabled = true
   const barLetters = document.getElementById("barLetters")
   const bars = new Bars(barCount)
   barLetters.innerText = `Bars: ${bars.toString()}`
@@ -55,5 +57,5 @@ function schedule(event) {
       results.appendChild(statsAway)
     })
   }
-
+  submitButton.disabled = false
 }
