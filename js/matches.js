@@ -24,7 +24,6 @@ export class Schedule {
         let attempt = 0;
         while (attempt < this.maxAttempts && !this.calculate()) {
             console.warn(`Attempt ${attempt}`);
-            this.processing.innerText = `>>>>  Attempt ${attempt} <<<<<`;
             this.reset();
             attempt++;
         }
@@ -33,7 +32,8 @@ export class Schedule {
             return false;
         }
         else {
-            console.error(`Succeeded to make schedule after ${attempt} attempts`);
+            this.processing.innerHTML = `>>>>  Success at attempt ${attempt} <<<<<`;
+            console.warn(`Succeeded to make schedule after ${attempt} attempts`);
             return true;
         }
     }

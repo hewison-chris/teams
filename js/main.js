@@ -16,7 +16,7 @@ function schedule(event) {
         alert("There needs to be at least one team per bar!");
     const weekCount = parseInt(values.weekCount);
     const submitButton = document.getElementById("submitButton");
-    submitButton.disabled = true;
+    submitButton.hidden = true;
     const barLetters = document.getElementById("barLetters");
     const bars = new Bars(barCount);
     barLetters.innerText = `Bars: ${bars.toString()}`;
@@ -51,16 +51,16 @@ function schedule(event) {
             let statsHome = document.createElement("p");
             let statsAway = document.createElement("p");
             stats.innerText = `${t} plays ${t.matchCount()} matches: ${t.homeCount()} home and and ${t.awayCount()} away`;
-            statsHome.innerText = `HOME: ${t.homeMatches().map(m => m.awayTeam.id())}`;
-            statsAway.innerText = `AWAY: ${t.awayMatches().map(m => m.homeTeam.id())}`;
+            statsHome.innerHTML = `HOME: ${t.homeMatches().map(m => m.awayTeam.id())}`;
+            statsAway.innerHTML = `AWAY: ${t.awayMatches().map(m => m.homeTeam.id())}`;
             results.appendChild(stats);
             results.appendChild(statsHome);
             results.appendChild(statsAway);
         });
     }
     else {
-        processing.innerText = `FAILED after ${maxAttempts}`;
+        processing.innerText = `TRY AGAIN. FAILED AFTER ${maxAttempts} ATTEMPTS`;
     }
-    submitButton.disabled = false;
+    submitButton.hidden = false;
 }
 //# sourceMappingURL=main.js.map
