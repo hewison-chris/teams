@@ -1,9 +1,13 @@
+import { random } from "./random.js";
 export class Bar {
     name;
     teams = [];
     matchCount = 0;
     constructor(name) {
         this.name = name;
+    }
+    reset() {
+        this.matchCount = 0;
     }
     toString() {
         return this.name;
@@ -17,6 +21,10 @@ export class Bar {
     isOneTeamBar() {
         return this.teams.length === 1;
     }
+    // As bars with only one team will only get matches every other week
+    weightedCount() {
+        return this.isOneTeamBar() ? this.matchCount * 2 : this.matchCount;
+    }
     pickHomeTeam(awayTeams, matchTarget) {
         const chooseFrom = this.teams.slice()
             .filter(team => !awayTeams.includes(team))
@@ -25,7 +33,7 @@ export class Bar {
         if (chooseFrom.length === 0) {
             return null;
         }
-        return chooseFrom[0];
+        return chooseFrom[random(this.teams.length - 1)];
     }
     pickOtherHomeTeam(homeTeam, awayTeams, matchTarget) {
         if (this.isOneTeamBar()) {

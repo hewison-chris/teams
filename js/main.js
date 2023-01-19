@@ -9,6 +9,7 @@ function schedule(event) {
     const values = Object.fromEntries(formData);
     const barCount = parseInt(values.barCount);
     const teamCount = parseInt(values.teamCount);
+    const maxAttempts = parseInt(values.maxAttempts);
     if (teamCount > 2 * barCount)
         alert("Only a maximum of two teams per bar is supported!");
     if (teamCount < barCount)
@@ -30,7 +31,7 @@ function schedule(event) {
             results.removeChild(results.firstChild);
         }
     console.log("Schedule...");
-    const schedule = new Schedule(bars, teams, weekCount);
+    const schedule = new Schedule(bars, teams, weekCount, maxAttempts);
     schedule.makeSchedule();
     schedule.weeks.forEach(week => {
         let weekHeader = document.createElement("h2");

@@ -15,6 +15,10 @@ export class Bars {
     return this.bars.map(bar => bar.toString())
   }
 
+  reset() {
+    this.bars.forEach(bar => bar.reset())
+  }
+
   barsWithOneTeam() {
     return this.bars.filter(bar => bar.isOneTeamBar())
   }

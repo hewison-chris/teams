@@ -22,13 +22,20 @@ export class Team {
     return this.id()
   }
 
+  reset() {
+    this.matches.splice(0, this.matches.length)
+    this.roundRobin.splice(0, this.roundRobin.length)
+    this.roundRobin2.splice(0, this.roundRobin2.length)
+  }
+
   debug() {
-    return this.id() + `roundRobin:${this.roundRobin.toString()} roundRobin2:${this.roundRobin2.toString()}`
+    return this.id() + `: first round robin:${this.roundRobin.toString()} second round robin:${this.roundRobin2.toString()}`
   }
 
   addMatch(match: Match) {
     this.matches.push(match)
     if (match.homeTeam === this) {
+      this.bar.matchCount++
       match.awayTeam.addMatch(match)
       this.removeTeamToPlay(match.awayTeam)
     } else {
@@ -64,11 +71,11 @@ export class Team {
 
   removeTeamToPlay(team: Team) {
     if (this.roundRobin.length === 0) {
-      this.roundRobin2.splice(this.roundRobin2.findIndex(t => t.toString() === team.toString()), 1)
+      this.roundRobin2.splice(this.roundRobin2.findIndex(t => t.id() === team.id()), 1)
     } else {
-      this.roundRobin.splice(this.roundRobin.findIndex(t => t.toString() === team.toString()), 1)
+      this.roundRobin.splice(this.roundRobin.findIndex(t => t.id() === team.id()), 1)
       if (this.roundRobin.length === 0) {
-        console.log(`Round robin matches complete for team ${team.toString()}`)
+        console.log(`Round robin matches complete for team ${team.id()}`)
       }
     }
   }
