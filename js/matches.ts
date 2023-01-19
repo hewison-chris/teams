@@ -10,12 +10,14 @@ export class Schedule {
   teams: Teams
   weeks: Week[] = []
   weekCount: number
+  processing: HTMLDivElement
 
-  constructor(bars: Bars, teams: Teams, weekCount: number, maxAttempts: number) {
+  constructor(bars: Bars, teams: Teams, weekCount: number, maxAttempts: number, processing: HTMLDivElement) {
     this.bars = bars
     this.teams = teams
     this.weekCount = weekCount
     this.maxAttempts = maxAttempts
+    this.processing = processing
   }
 
   reset() {
@@ -29,6 +31,7 @@ export class Schedule {
     let attempt = 0
     while (attempt < this.maxAttempts && !this.calculate()) {
       console.warn(`Attempt ${attempt}`)
+      this.processing.innerText = `>>>>  Attempt ${attempt} <<<<<`
       this.reset()
       attempt++
     }

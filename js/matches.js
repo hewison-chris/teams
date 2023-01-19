@@ -6,11 +6,13 @@ export class Schedule {
     teams;
     weeks = [];
     weekCount;
-    constructor(bars, teams, weekCount, maxAttempts) {
+    processing;
+    constructor(bars, teams, weekCount, maxAttempts, processing) {
         this.bars = bars;
         this.teams = teams;
         this.weekCount = weekCount;
         this.maxAttempts = maxAttempts;
+        this.processing = processing;
     }
     reset() {
         this.weeks.splice(0, this.weeks.length);
@@ -22,6 +24,7 @@ export class Schedule {
         let attempt = 0;
         while (attempt < this.maxAttempts && !this.calculate()) {
             console.warn(`Attempt ${attempt}`);
+            this.processing.innerText = `>>>>  Attempt ${attempt} <<<<<`;
             this.reset();
             attempt++;
         }

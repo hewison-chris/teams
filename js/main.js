@@ -27,13 +27,14 @@ function schedule(event) {
     twoTeamBars.innerText = `Bars with two teams: ${bars.barsWithTwoTeams().toString()}`;
     const teamLetters = document.getElementById("teamLetters");
     teamLetters.innerText = `Teams: ${teams.toString()}`;
+    const processing = document.getElementById("Processing");
     const results = document.getElementById("results");
     if (results !== null)
         while (results.firstChild) {
             results.removeChild(results.firstChild);
         }
     console.log("Schedule...");
-    const schedule = new Schedule(bars, teams, weekCount, maxAttempts);
+    const schedule = new Schedule(bars, teams, weekCount, maxAttempts, processing);
     if (schedule.makeSchedule()) {
         schedule.weeks.forEach(week => {
             let weekHeader = document.createElement("h2");
@@ -56,6 +57,9 @@ function schedule(event) {
             results.appendChild(statsHome);
             results.appendChild(statsAway);
         });
+    }
+    else {
+        processing.innerText = `FAILED after ${maxAttempts}`;
     }
     submitButton.disabled = false;
 }

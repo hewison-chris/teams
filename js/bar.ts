@@ -43,7 +43,7 @@ export class Bar {
     if (chooseFrom.length === 0) {
       return null
     }
-    return chooseFrom[random(this.teams.length - 1)]
+    return chooseFrom[random(this.teamCount() - 1)]
   }
 
   pickOtherHomeTeam(homeTeam: Team, awayTeams: Team[], matchTarget: number): Team {
