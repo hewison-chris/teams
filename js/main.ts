@@ -12,8 +12,18 @@ function schedule(event) {
   const barCount = parseInt(<string>values.barCount)
   const teamCount = parseInt(<string>values.teamCount)
   const maxAttempts = parseInt(<string>values.maxAttempts)
-  if (teamCount > 2 * barCount) alert("Only a maximum of two teams per bar is supported!")
-  if (teamCount < barCount) alert("There needs to be at least one team per bar!")
+  if (teamCount % 2 === 1) {
+    alert("Currently only even number of teams is supported!")
+    return
+  }
+  if (teamCount > 2 * barCount) {
+    alert("Only a maximum of two teams per bar is supported!")
+    return
+  }
+  if (teamCount < barCount) {
+    alert("There needs to be at least one team per bar!")
+    return
+  }
   const weekCount = parseInt(<string>values.weekCount)
   const submitButton = document.getElementById("submitButton") as HTMLButtonElement
   submitButton.hidden = true
