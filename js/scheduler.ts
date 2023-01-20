@@ -3,21 +3,20 @@ import {Teams} from "./teams.js"
 import {Match} from "./match.js"
 import {Week} from "./week.js"
 import {Team} from "./team.js"
+import {Results} from "./results.js"
 
-export class Schedule {
+export class Scheduler {
   maxAttempts: number
   bars: Bars
   teams: Teams
   weeks: Week[] = []
   weekCount: number
-  processing: HTMLDivElement
 
-  constructor(bars: Bars, teams: Teams, weekCount: number, maxAttempts: number, processing: HTMLDivElement) {
+  constructor(bars: Bars, teams: Teams, weekCount: number, maxAttempts: number) {
     this.bars = bars
     this.teams = teams
     this.weekCount = weekCount
     this.maxAttempts = maxAttempts
-    this.processing = processing
   }
 
   reset() {
@@ -27,7 +26,8 @@ export class Schedule {
     this.teams.teams.forEach(team => team.addTeamsToPlay(this.teams.teams, this.weekCount))
   }
 
-  makeSchedule(): boolean {
+  makeSchedule(): Promise<Results> {
+    const results = new Results(this.bars, this.teams)
     let attempt = 0
     while (attempt < this.maxAttempts && !this.calculate()) {
       console.warn(`Attempt ${attempt}`)
@@ -35,13 +35,14 @@ export class Schedule {
       attempt++
     }
     if (attempt >= this.maxAttempts) {
-      console.error(`Failed to make schedule with equal number of matches after ${attempt} attempts`)
-      return false
+      results.message = `Failed to make schedule with equal number of matches after ${attempt} attempts`
     } else {
-      this.processing.innerHTML = `>>>>  Success at attempt ${attempt} <<<<<`
-      console.warn(`Succeeded to make schedule after ${attempt} attempts`)
-      return true
+      results.completed = true
+      results.weeks = this.weeks
+      results.message = `Succeeded to make schedule after ${attempt} attempts`
     }
+    console.warn(results.message)
+    return Promise.resolve(results)
   }
 
   calculate(): boolean {
@@ -86,7 +87,6 @@ export class Schedule {
         this.teams.teams.forEach(t => {
           console.log(t.debug())
         })
-        console.error("FAILED this attempt")
         return false
       }
       console.log(this.weeks[week].toString())
