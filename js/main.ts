@@ -3,19 +3,55 @@ import {Scheduler} from "./scheduler.js"
 import {Bars} from "./bars.js"
 import {Teams} from "./teams.js"
 
-export function schedule(barCount: number, teamCount: number, weekCount: number, maxAttempts: number): Promise<Results> {
-  if (teamCount < barCount) {
-    return Promise.reject("There needs to be at least one team per bar!")
+const delay = ms => new Promise(res => setTimeout(res, ms))
+
+export async function* wait(secs: number = 3): AsyncGenerator<string> {
+  let ms = secs * 1000
+  while (ms > 0) {
+    yield `Getting ready: ${ms / 1000} secs`
+    await delay(1000)
+    ms -= 1000
   }
-  if (teamCount > 2 * barCount) {
-    return Promise.reject("Only a maximum of two teams per bar is supported!")
-  }
-  if (teamCount % 2 === 1) {
-    return Promise.reject("Currently only even number of teams is supported!")
-  }
-  console.log("Schedule...")
+  yield `GO`
+}
+
+export async function* schedule(barCount: number, teamCount: number, weekCount: number, maxAttempts: number): AsyncGenerator<Results> {
   const bars = new Bars(barCount)
   const teams = new Teams(teamCount, bars)
-  const scheduler = new Scheduler(bars, teams, weekCount, maxAttempts)
-  return scheduler.makeSchedule()
+  const results = new Results(bars, teams)
+  if (teamCount < barCount) {
+    results.error = "There needs to be at least one team per bar!"
+    yield results
+  }
+  if (teamCount > 2 * barCount) {
+    results.error = "Only a maximum of two teams per bar is supported!"
+    yield results
+  }
+  if (teamCount % 2 === 1) {
+    results.error = "Currently only even number of teams is supported!"
+    yield results
+  }
+  yield results
+  const scheduler = new Scheduler(bars, teams, weekCount)
+  console.log("Schedule...")
+  while (results.attempt < maxAttempts && !scheduler.calculate()) {
+    console.warn(`Attempt ${results.attempt}`)
+    scheduler.reset()
+    results.attempt++
+    if (results.attempt % 10 === 0) {
+      results.message = `Not yet found a solution after ${results.attempt} attempts`
+      await delay(100)
+      yield results
+    }
+  }
+  if (results.attempt >= maxAttempts) {
+    results.error = `Failed to make schedule with equal number of matches after ${results.attempt} attempts`
+    console.warn(results.message)
+  } else {
+    results.completed = true
+    results.weeks = scheduler.weeks
+    results.message = `Succeeded to make schedule after ${results.attempt} attempts`
+    console.log(results.message)
+  }
+  yield results
 }

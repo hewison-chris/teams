@@ -57,7 +57,7 @@
 <script src="js/plugins.js"></script>
 <script type="module" src="js/main.js"></script>
 <script type="module">
-  import {schedule} from './js/main.js'
+  import {schedule, wait} from './js/main.js'
 
   window.addEventListener('DOMContentLoaded', () => {
     console.log("Content loaded")
@@ -76,22 +76,31 @@
           resultsDiv.removeChild(resultsDiv.firstChild)
         }
       }
-      messageElem.innerText = "Processing ..."
-      schedule(
+      for await (const res of wait(2)) {
+        messageElem.innerText = res.toString()
+      }
+      for await (const res of schedule(
         parseInt(barCount.value),
         parseInt(teamCount.value),
         parseInt(weekCount.value),
-        parseInt(maxAttempts.value)
-      ).then(res => {
-        console.log(res.message)
-        messageElem.innerText = res.message
-        const oneTeamBars = document.getElementById("oneTeamBars")
-        oneTeamBars.innerText = `Bars with one team: ${res.bars.barsWithOneTeam().toString()}`
-        const twoTeamBars = document.getElementById("twoTeamBars")
-        twoTeamBars.innerText = `Bars with two teams: ${res.bars.barsWithTwoTeams().toString()}`
-        const teamLetters = document.getElementById("teamLetters")
-        teamLetters.innerText = `Teams: ${res.teams.toString()}`
+        parseInt(maxAttempts.value))) {
+        if (res.error) {
+          console.log(res.error)
+          messageElem.innerHTML = res.error
+          button.disabled = false
+          return
+        }
+        if (res.attempt === 0) {
+          const oneTeamBars = document.getElementById("oneTeamBars")
+          oneTeamBars.innerText = `Bars with one team: ${res.bars.barsWithOneTeam().toString()}`
+          const twoTeamBars = document.getElementById("twoTeamBars")
+          twoTeamBars.innerText = `Bars with two teams: ${res.bars.barsWithTwoTeams().toString()}`
+          const teamLetters = document.getElementById("teamLetters")
+          teamLetters.innerText = `Teams: ${res.teams.toString()}`
+          messageElem.innerHTML = "Processing ..."
+        }
         if (res.completed) {
+          messageElem.innerHTML = res.message
           res.weeks.forEach(week => {
             let weekHeader = document.createElement("h2")
             weekHeader.innerText = `WEEK ${week.weekNumber().toString()}`
@@ -113,11 +122,10 @@
             resultsDiv.appendChild(statsHome)
             resultsDiv.appendChild(statsAway)
           })
+        } else {
+          messageElem.innerHTML = res.message
         }
-      }).catch(e => {
-        messageElem.innerText = e
-        console.error(e)
-      })
+      }
       button.disabled = false
     }
   })

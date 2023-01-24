@@ -1,11 +1,12 @@
 export class Results {
     bars;
     teams;
-    weeks;
-    completed;
+    weeks = [];
+    completed = false;
     message;
+    error;
+    attempt = 0;
     constructor(bars, teams) {
-        this.completed = false;
         this.bars = bars;
         this.teams = teams;
     }

@@ -1,42 +1,20 @@
 import { Match } from "./match.js";
 import { Week } from "./week.js";
-import { Results } from "./results.js";
 export class Scheduler {
-    maxAttempts;
     bars;
     teams;
     weeks = [];
     weekCount;
-    constructor(bars, teams, weekCount, maxAttempts) {
+    constructor(bars, teams, weekCount) {
         this.bars = bars;
         this.teams = teams;
         this.weekCount = weekCount;
-        this.maxAttempts = maxAttempts;
     }
     reset() {
         this.weeks.splice(0, this.weeks.length);
         this.bars.reset();
         this.teams.reset();
         this.teams.teams.forEach(team => team.addTeamsToPlay(this.teams.teams, this.weekCount));
-    }
-    makeSchedule() {
-        const results = new Results(this.bars, this.teams);
-        let attempt = 0;
-        while (attempt < this.maxAttempts && !this.calculate()) {
-            console.warn(`Attempt ${attempt}`);
-            this.reset();
-            attempt++;
-        }
-        if (attempt >= this.maxAttempts) {
-            results.message = `Failed to make schedule with equal number of matches after ${attempt} attempts`;
-        }
-        else {
-            results.completed = true;
-            results.weeks = this.weeks;
-            results.message = `Succeeded to make schedule after ${attempt} attempts`;
-        }
-        console.warn(results.message);
-        return Promise.resolve(results);
     }
     calculate() {
         for (let week = 0; week < this.weekCount; week++) {
