@@ -40,7 +40,7 @@ export async function* schedule(barCount: number, teamCount: number, weekCount: 
     results.attempt++
     if (results.attempt % 10 === 0) {
       results.message = `Not yet found a solution after ${results.attempt} attempts`
-      await delay(25)
+      await delay(10)
       yield results
     }
   }
