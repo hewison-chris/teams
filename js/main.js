@@ -24,15 +24,10 @@ export async function* schedule(barCount, teamCount, weekCount, maxAttempts) {
         results.error = "Only a maximum of two teams per bar is supported!";
         yield results;
     }
-    if (teamCount % 2 === 1) {
-        results.error = "Currently only even number of teams is supported!";
-        yield results;
-    }
     yield results;
     const scheduler = new Scheduler(bars, teams, weekCount);
     console.log("Schedule...");
     while (results.attempt < maxAttempts && !scheduler.calculate()) {
-        console.warn(`Attempt ${results.attempt}`);
         scheduler.reset();
         results.attempt++;
         if (results.attempt % 10 === 0) {

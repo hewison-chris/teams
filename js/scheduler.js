@@ -1,5 +1,6 @@
 import { Match } from "./match.js";
 import { Week } from "./week.js";
+import { debugLog } from "./logging.js";
 export class Scheduler {
     bars;
     teams;
@@ -18,29 +19,29 @@ export class Scheduler {
     }
     calculate() {
         for (let week = 0; week < this.weekCount; week++) {
-            console.log(`Week ${week + 1}`);
+            debugLog(`Week ${week + 1}`);
             let homeTeams = [];
             let awayTeams = [];
             this.weeks.push(new Week(week));
             const homeBars = this.bars.bars.slice()
                 .sort((a, b) => a.weightedCount() - b.weightedCount());
-            console.log(`home bars=${homeBars.map(b => "[" + b.name + ":" + b.weightedCount() + "]")}`);
-            console.log(`teams: home/away ${this.teams.teams.map(t => "[" + t.id() + ":" + t.homeCount() + "/" + t.awayCount() + "]")}`);
+            debugLog(`home bars=${homeBars.map(b => "[" + b.name + ":" + b.weightedCount() + "]")}`);
+            debugLog(`teams: home/away ${this.teams.teams.map(t => "[" + t.id() + ":" + t.homeCount() + "/" + t.awayCount() + "]")}`);
             homeBars.forEach(bar => {
                 let homeTeam = bar.pickHomeTeam(awayTeams, this.weekCount);
                 if (homeTeam === null) {
-                    console.log(`No team left for home bar ${bar}`);
+                    debugLog(`No team left for home bar ${bar}`);
                 }
                 else {
-                    console.log(`picked home team ${homeTeam}`);
+                    debugLog(`picked home team ${homeTeam}`);
                     const awayTeam = this.teams.pickAwayTeam(homeTeam, homeTeams, awayTeams, this.weekCount, homeBars.slice(homeBars.findIndex(b => b === bar), this.teams.count / 2));
                     if (awayTeam === null) {
                         homeTeam = bar.pickOtherHomeTeam(homeTeam, awayTeams, this.weekCount);
                         if (homeTeam === null) {
-                            console.log(`No team left for home bar ${bar}`);
+                            debugLog(`No team left for home bar ${bar}`);
                         }
                         else {
-                            console.log(`picked other home team ${homeTeam}`);
+                            debugLog(`picked other home team ${homeTeam}`);
                             const anotherAwayTeam = this.teams.pickAwayTeam(homeTeam, homeTeams, awayTeams, this.weekCount, homeBars.slice(0, this.teams.count / 2));
                             if (anotherAwayTeam !== null) {
                                 homeTeams.push(homeTeam);
@@ -58,11 +59,11 @@ export class Scheduler {
             });
             if (this.weeks[week].matches.length < this.teams.count / 2) {
                 this.teams.teams.forEach(t => {
-                    console.log(t.debug());
+                    debugLog(t.debug());
                 });
                 return false;
             }
-            console.log(this.weeks[week].toString());
+            debugLog(this.weeks[week].toString());
         }
         return true;
     }

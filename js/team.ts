@@ -1,5 +1,6 @@
 import {Bar} from "./bar.js"
 import {Match} from "./match.js"
+import {debugLog} from "./logging.js"
 
 export class Team {
   bar: Bar
@@ -75,7 +76,7 @@ export class Team {
     } else {
       this.roundRobin.splice(this.roundRobin.findIndex(t => t.id() === team.id()), 1)
       if (this.roundRobin.length === 0) {
-        console.log(`Round robin matches complete for team ${team.id()}`)
+        debugLog(`Round robin matches complete for team ${team.id()}`)
       }
     }
   }
