@@ -1,4 +1,4 @@
-import { debugLog } from "./logging.js";
+import { debugLog } from "./main.js";
 export class Team {
     bar;
     index;

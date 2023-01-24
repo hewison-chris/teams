@@ -1,6 +1,6 @@
 import { Team } from "./team.js";
 import { random } from "./random.js";
-import { debugLog } from "./logging.js";
+import { debugLog } from "./main.js";
 export class Teams {
     teams = [];
     count;

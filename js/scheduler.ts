@@ -3,7 +3,7 @@ import {Teams} from "./teams.js"
 import {Match} from "./match.js"
 import {Week} from "./week.js"
 import {Team} from "./team.js"
-import {debugLog} from "./logging.js"
+import {debugLog} from "./main.js"
 
 export class Scheduler {
   bars: Bars

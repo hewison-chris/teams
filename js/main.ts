@@ -3,6 +3,14 @@ import {Scheduler} from "./scheduler.js"
 import {Bars} from "./bars.js"
 import {Teams} from "./teams.js"
 
+let consoleDebugLogging = false
+
+export function debugLog(message: string) {
+  if (consoleDebugLogging) {
+    console.log(message)
+  }
+}
+
 const delay = ms => new Promise(res => setTimeout(res, ms))
 
 export async function* countDown(counts: number = 3): AsyncGenerator<string> {
@@ -15,7 +23,9 @@ export async function* countDown(counts: number = 3): AsyncGenerator<string> {
   yield `GO`
 }
 
-export async function* schedule(barCount: number, teamCount: number, weekCount: number, maxAttempts: number): AsyncGenerator<Results> {
+export async function* schedule(barCount: number, teamCount: number, weekCount: number,
+                                maxAttempts: number, consoleLogging: boolean): AsyncGenerator<Results> {
+  consoleDebugLogging = consoleLogging
   const bars = new Bars(barCount)
   const teams = new Teams(teamCount, bars)
   const results = new Results(bars, teams)

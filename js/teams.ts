@@ -2,7 +2,8 @@ import {Bars} from "./bars.js"
 import {Team} from "./team.js"
 import {Bar} from "./bar.js"
 import {random} from "./random.js"
-import {debugLog} from "./logging.js"
+import {debugLog} from "./main.js"
+
 
 export class Teams {
   teams: Team[] = []

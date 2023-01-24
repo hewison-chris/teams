@@ -1,6 +1,7 @@
 import {Bar} from "./bar.js"
 import {Match} from "./match.js"
-import {debugLog} from "./logging.js"
+import {debugLog} from "./main.js"
+
 
 export class Team {
   bar: Bar

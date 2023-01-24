@@ -2,6 +2,12 @@ import { Results } from "./results.js";
 import { Scheduler } from "./scheduler.js";
 import { Bars } from "./bars.js";
 import { Teams } from "./teams.js";
+let consoleDebugLogging = false;
+export function debugLog(message) {
+    if (consoleDebugLogging) {
+        console.log(message);
+    }
+}
 const delay = ms => new Promise(res => setTimeout(res, ms));
 export async function* countDown(counts = 3) {
     let count = counts;
@@ -12,7 +18,8 @@ export async function* countDown(counts = 3) {
     }
     yield `GO`;
 }
-export async function* schedule(barCount, teamCount, weekCount, maxAttempts) {
+export async function* schedule(barCount, teamCount, weekCount, maxAttempts, consoleLogging) {
+    consoleDebugLogging = consoleLogging;
     const bars = new Bars(barCount);
     const teams = new Teams(teamCount, bars);
     const results = new Results(bars, teams);

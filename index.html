@@ -34,17 +34,16 @@
     However, it can take several attempts to find the correct combination.</p>
   <p>N.B. It is assumed that no bar will have more than two teams!</p>
   <h2>Enter info about league teams</h2>
-  <form id="info">
-    <label for="teamCount">Number of teams:</label>
-    <input type="number" id="teamCount" name="teamCount" value="12" min="3" max="26"><br><br>
-    <label for="barCount">Number of bars:</label>
-    <input type="number" id="barCount" name="barCount" value="7" min="2" max="20"><br><br>
-    <label for="weekCount">Number of weeks:</label>
-    <input type="number" id="weekCount" name="weekCount" value="14" min="3" max="24"><br><br>
-    <label for="maxAttempts">Maximum attempts:</label>
-    <input type="number" id="maxAttempts" name="maxAttempts" value="500" min="1" max="10000"><br><br>
-    <input type="button" id="button" value="Create Random Schedule"><br><br>
-  </form>
+  <label for="teamCount">Number of teams:</label>
+  <input type="number" id="teamCount" name="teamCount" value="12"><br><br>
+  <label for="barCount">Number of bars:</label>
+  <input type="number" id="barCount" name="barCount" value="7"><br><br>
+  <label for="weekCount">Number of weeks:</label>
+  <input type="number" id="weekCount" name="weekCount" value="14"><br><br>
+  <label for="maxAttempts">Maximum attempts:</label>
+  <input type="number" id="maxAttempts" name="maxAttempts" value="500"><br><br>
+  <input type="hidden" id="consoleLogging" name="consoleLogging" value="false">
+  <input type="button" id="button" value="Create Random Schedule"><br><br>
   <h3 id="barLetters"></h3>
   <h3 id="twoTeamBars"></h3>
   <h3 id="oneTeamBars"></h3>
@@ -66,6 +65,7 @@
     const teamCount = document.getElementById('teamCount')
     const weekCount = document.getElementById('weekCount')
     const maxAttempts = document.getElementById('maxAttempts')
+    const consoleLogging = document.getElementById('consoleLogging')
     const messageElem = document.getElementById('message')
     button.onclick = async () => {
       console.log("Call create schedule...")
@@ -83,7 +83,8 @@
         parseInt(barCount.value),
         parseInt(teamCount.value),
         parseInt(weekCount.value),
-        parseInt(maxAttempts.value))) {
+        parseInt(maxAttempts.value),
+        consoleLogging.value === "false" ? false : true)) {
         if (res.error) {
           console.log(res.error)
           messageElem.innerHTML = res.error
