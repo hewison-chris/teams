@@ -5,12 +5,12 @@ import {Teams} from "./teams.js"
 
 const delay = ms => new Promise(res => setTimeout(res, ms))
 
-export async function* wait(secs: number = 3): AsyncGenerator<string> {
-  let ms = secs * 1000
-  while (ms > 0) {
-    yield `Getting ready: ${ms / 1000} secs`
-    await delay(1000)
-    ms -= 1000
+export async function* countDown(counts: number = 3): AsyncGenerator<string> {
+  let count = counts
+  while (count > 0) {
+    yield `Getting ready: ${count}`
+    await delay(200)
+    count--
   }
   yield `GO`
 }
@@ -40,7 +40,7 @@ export async function* schedule(barCount: number, teamCount: number, weekCount: 
     results.attempt++
     if (results.attempt % 10 === 0) {
       results.message = `Not yet found a solution after ${results.attempt} attempts`
-      await delay(100)
+      await delay(25)
       yield results
     }
   }

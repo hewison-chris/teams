@@ -57,7 +57,7 @@
 <script src="js/plugins.js"></script>
 <script type="module" src="js/main.js"></script>
 <script type="module">
-  import {schedule, wait} from './js/main.js'
+  import {schedule, countDown} from './js/main.js'
 
   window.addEventListener('DOMContentLoaded', () => {
     console.log("Content loaded")
@@ -76,7 +76,7 @@
           resultsDiv.removeChild(resultsDiv.firstChild)
         }
       }
-      for await (const res of wait(2)) {
+      for await (const res of countDown()) {
         messageElem.innerText = res.toString()
       }
       for await (const res of schedule(

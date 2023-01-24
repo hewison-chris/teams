@@ -3,12 +3,12 @@ import { Scheduler } from "./scheduler.js";
 import { Bars } from "./bars.js";
 import { Teams } from "./teams.js";
 const delay = ms => new Promise(res => setTimeout(res, ms));
-export async function* wait(secs = 3) {
-    let ms = secs * 1000;
-    while (ms > 0) {
-        yield `Getting ready: ${ms / 1000} secs`;
-        await delay(1000);
-        ms -= 1000;
+export async function* countDown(counts = 3) {
+    let count = counts;
+    while (count > 0) {
+        yield `Getting ready: ${count}`;
+        await delay(200);
+        count--;
     }
     yield `GO`;
 }
@@ -37,7 +37,7 @@ export async function* schedule(barCount, teamCount, weekCount, maxAttempts) {
         results.attempt++;
         if (results.attempt % 10 === 0) {
             results.message = `Not yet found a solution after ${results.attempt} attempts`;
-            await delay(100);
+            await delay(25);
             yield results;
         }
     }
