@@ -1,9 +1,6 @@
 import {Bars} from "./bars.js"
 import {Team} from "./team.js"
-import {Bar} from "./bar.js"
 import {random} from "./random.js"
-import {debugLog} from "./main.js"
-
 
 export class Teams {
   teams: Team[] = []
@@ -18,6 +15,14 @@ export class Teams {
     console.log(`teams = ${this.toString()}`)
   }
 
+  halfCount() {
+    return Math.floor(this.count / 2)
+  }
+
+  matchesLeft(matchTarget: number) {
+    return this.teams.findIndex(team => team.matchCount() < matchTarget) !== -1
+  }
+
   toString() {
     return this.teams.map(team => team.id())
   }
@@ -26,46 +31,36 @@ export class Teams {
     this.teams.forEach(team => team.reset())
   }
 
-  pickAwayTeam(homeTeam: Team, homeTeams: Team[], awayTeams: Team[], matchTarget: number, remainingMatchBars: Bar[]): Team {
-    debugLog(`Remaining match bars:${remainingMatchBars.toString()}`)
+  pickAwayTeam(homeTeam: Team, homeTeams: Team[], awayTeams: Team[], matchTarget: number): Team | null {
     const teamsNotPlayingThisWeekYet = this.teams
       // Not the home team
       .filter(team => team.id() !== homeTeam.id())
-      // Not other match this week
+      // Not already playing at home
       .filter(team => !homeTeams.includes(team))
+      // Not already playing away
       .filter(team => !awayTeams.includes(team))
+    console.log(`Teams not yet playing this week: ${teamsNotPlayingThisWeekYet}`)
     const possibleTeams = teamsNotPlayingThisWeekYet
       // Not played all matches
       .filter(team => team.matchCount() < matchTarget)
       // Not played all away matches
-      .filter(team => team.awayCount() < matchTarget / 2)
-      // Team is needed for home match
-      .filter(team => !(remainingMatchBars.includes(team.bar)
-        && (team.bar.isOneTeamBar() || awayTeams.map(t => t.bar).concat(homeTeams.map(t => t.bar)).includes(team.bar))))
-      // Already played this team at home
-      .filter(team => !homeTeam.homeMatches().map(m => m.awayTeam).includes(team))
-    debugLog(`Teams not yet playing this week: ${teamsNotPlayingThisWeekYet}`)
-    debugLog(`Possible teams: ${possibleTeams}`)
-    debugLog(`Pick away team to play ${homeTeam} from robin1:${homeTeam.roundRobin.toString()}`)
+      .filter(team => team.awayCount() < Math.floor(matchTarget / 2))
+      // Already played this team at home for required number
+      .filter(team => homeTeam.homeMatches().map(m => m.awayTeam)
+        .filter(t => t.id() === team.id()).length < Math.floor(matchTarget / 2))
+    console.log(`Possible teams: ${possibleTeams}`)
     let teamsToPlay = possibleTeams
-      .filter(team => homeTeam.roundRobin.includes(team))
+      .filter(team => homeTeam.roundRobin.teams.includes(team))
       .sort((a, b) =>
         a.matchCount() === b.matchCount() ? a.awayCount() - b.awayCount() : a.matchCount() - b.matchCount())
+    console.log(`Try choose from ${teamsToPlay}`)
     if (teamsToPlay.length === 0) {
-      debugLog(`Pick away team to play ${homeTeam} from robin2:${homeTeam.roundRobin2.toString()}`)
-      teamsToPlay = possibleTeams
-        .filter(team => homeTeam.roundRobin2.includes(team))
-        .sort((a, b) =>
-          a.matchCount() === b.matchCount() ? a.awayCount() - b.awayCount() : a.matchCount() - b.matchCount())
-      debugLog(`Try choose from ${teamsToPlay}`)
-    }
-    if (teamsToPlay.length === 0) {
-      debugLog(`No teams to select`)
+      console.log(`No teams to select`)
       return null
     }
-    debugLog(`Home team ${homeTeam.toString()}: choose from ${teamsToPlay}`)
+    console.log(`Home team ${homeTeam.toString()}: choose from ${teamsToPlay}`)
     const picked: Team = teamsToPlay[random(teamsToPlay.length)]
-    debugLog(`Picked away team ${picked.toString()}`)
+    console.log(`Picked away team ${picked.toString()}`)
     return picked
   }
 }

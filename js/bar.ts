@@ -32,27 +32,30 @@ export class Bar {
 
   // As bars with only one team will only get matches every other week
   weightedCount() {
-    return this.isOneTeamBar() ? this.matchCount * 2 : this.matchCount
+    return this.isOneTeamBar() ? this.matchCount : this.matchCount
+    // return this.isOneTeamBar() ? this.matchCount * 2 : this.matchCount
   }
 
-  pickHomeTeam(awayTeams: Team[], matchTarget: number): Team {
+  pickHomeTeam(awayTeams: Team[], matchTarget: number): Team | null {
     const chooseFrom = this.teams.slice()
+      .filter(team => team.matchCount() < matchTarget)
+      .filter(team => team.homeCount() < Math.floor(matchTarget / 2))
       .filter(team => !awayTeams.includes(team))
-      .filter(team => team.homeCount() < matchTarget / 2)
       .sort((a, b) => a.homeCount() - b.homeCount())
     if (chooseFrom.length === 0) {
       return null
     }
-    return chooseFrom[random(this.teamCount() - 1)]
+    return chooseFrom[random(this.teamCount())]
   }
 
-  pickOtherHomeTeam(homeTeam: Team, awayTeams: Team[], matchTarget: number): Team {
+  pickOtherHomeTeam(homeTeam: Team, awayTeams: Team[], matchTarget: number): Team | null {
     if (this.isOneTeamBar()) {
       return null
     }
     const chooseFrom = this.teams
       .filter(team => team.index !== homeTeam.index)
-      .filter(team => team.homeCount() < matchTarget / 2)
+      .filter(team => team.matchCount() < matchTarget)
+      .filter(team => team.homeCount() < Math.floor(matchTarget / 2))
       .filter(team => !awayTeams.includes(team))
     if (chooseFrom.length === 0) {
       return null

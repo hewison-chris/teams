@@ -4,8 +4,8 @@ export class Week {
   week: number
   matches: Match[] = []
 
-  constructor(week: number) {
-    this.week = week
+  constructor(weekIndex: number) {
+    this.week = weekIndex + 1
   }
 
   toString() {
@@ -13,6 +13,6 @@ export class Week {
   }
 
   weekNumber() {
-    return this.week + 1
+    return this.week
   }
 }

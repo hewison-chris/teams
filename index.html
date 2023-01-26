@@ -29,20 +29,19 @@
 
 <div>
   <p>Click the "Schedule" button to create a schedule for one round-robin
-    plus extra matches to make up the number of requested weeks".</p>
+    plus extra matches to make up the number of requested matches".</p>
   <p>Schedule avoids any team playing the same team at the same bar twice.
-    However, it can take several attempts to find the correct combination.</p>
+    However, it can take several attempts to find a correct combination, if one exists.</p>
   <p>N.B. It is assumed that no bar will have more than two teams!</p>
   <h2>Enter info about league teams</h2>
   <label for="teamCount">Number of teams:</label>
   <input type="number" id="teamCount" name="teamCount" value="12"><br><br>
   <label for="barCount">Number of bars:</label>
   <input type="number" id="barCount" name="barCount" value="7"><br><br>
-  <label for="weekCount">Number of weeks:</label>
-  <input type="number" id="weekCount" name="weekCount" value="14"><br><br>
+  <label for="matchCount">Number of matches per team:</label>
+  <input type="number" id="matchCount" name="matchCount" value="14"><br><br>
   <label for="maxAttempts">Maximum attempts:</label>
   <input type="number" id="maxAttempts" name="maxAttempts" value="500"><br><br>
-  <input type="hidden" id="consoleLogging" name="consoleLogging" value="false">
   <input type="button" id="button" value="Create Random Schedule"><br><br>
   <h3 id="barLetters"></h3>
   <h3 id="twoTeamBars"></h3>
@@ -58,14 +57,34 @@
 <script type="module">
   import {schedule, countDown} from './js/main.js'
 
+  function showResults(res) {
+    const resultsDiv = document.getElementById("results")
+    res.teams.teams.forEach(t => {
+      let stats = document.createElement("h3")
+      let statsHome = document.createElement("p")
+      let statsAway = document.createElement("p")
+      stats.innerText = `${t} plays ${t.matchCount()} matches: ${t.homeCount()} home and ${t.awayCount()} away`
+      statsHome.innerHTML = `HOME: ${t.homeMatches().map(m => m.awayTeam.id())}`
+      statsAway.innerHTML = `AWAY: ${t.awayMatches().map(m => m.homeTeam.id())}`
+      resultsDiv.appendChild(stats)
+      resultsDiv.appendChild(statsHome)
+      resultsDiv.appendChild(statsAway)
+    })
+    res.weeks.forEach(week => {
+      let weekHeader = document.createElement("h3")
+      weekHeader.innerText = `WEEK ${week.weekNumber().toString()}: ${week.matches.join(', ')}`
+      resultsDiv.appendChild(weekHeader)
+    })
+
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
     console.log("Content loaded")
     const button = document.getElementById('button')
     const barCount = document.getElementById('barCount')
     const teamCount = document.getElementById('teamCount')
-    const weekCount = document.getElementById('weekCount')
+    const matchCount = document.getElementById('matchCount')
     const maxAttempts = document.getElementById('maxAttempts')
-    const consoleLogging = document.getElementById('consoleLogging')
     const messageElem = document.getElementById('message')
     button.onclick = async () => {
       console.log("Call create schedule...")
@@ -82,14 +101,14 @@
       for await (const res of schedule(
         parseInt(barCount.value),
         parseInt(teamCount.value),
-        parseInt(weekCount.value),
-        parseInt(maxAttempts.value),
-        consoleLogging.value === "false" ? false : true)) {
+        parseInt(matchCount.value),
+        parseInt(maxAttempts.value))) {
         if (res.error) {
           console.log(res.error)
           messageElem.innerHTML = res.error
+          showResults(res)
           button.disabled = false
-          return
+          return false
         }
         if (res.attempt === 0) {
           const oneTeamBars = document.getElementById("oneTeamBars")
@@ -102,32 +121,13 @@
         }
         if (res.completed) {
           messageElem.innerHTML = res.message
-          res.weeks.forEach(week => {
-            let weekHeader = document.createElement("h2")
-            weekHeader.innerText = `WEEK ${week.weekNumber().toString()}`
-            resultsDiv.appendChild(weekHeader)
-            week.matches.forEach(match => {
-              let item = document.createElement("h3")
-              item.appendChild(document.createTextNode(match.toString()))
-              resultsDiv.appendChild(item)
-            })
-          })
-          res.teams.teams.forEach(t => {
-            let stats = document.createElement("h3")
-            let statsHome = document.createElement("p")
-            let statsAway = document.createElement("p")
-            stats.innerText = `${t} plays ${t.matchCount()} matches: ${t.homeCount()} home and and ${t.awayCount()} away`
-            statsHome.innerHTML = `HOME: ${t.homeMatches().map(m => m.awayTeam.id())}`
-            statsAway.innerHTML = `AWAY: ${t.awayMatches().map(m => m.homeTeam.id())}`
-            resultsDiv.appendChild(stats)
-            resultsDiv.appendChild(statsHome)
-            resultsDiv.appendChild(statsAway)
-          })
+          showResults(res)
         } else {
           messageElem.innerHTML = res.message
         }
       }
       button.disabled = false
+      return false
     }
   })
 </script>
