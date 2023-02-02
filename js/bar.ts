@@ -1,5 +1,5 @@
-import {Team} from "./team.js"
-import {random} from "./random.js"
+import {Team} from "./team"
+import {random} from "./random"
 
 export class Bar {
   name: string

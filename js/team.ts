@@ -1,6 +1,6 @@
-import {Bar} from "./bar.js"
-import {Match} from "./match.js"
-import {RoundRobin} from "./RoundRobin.js"
+import {Bar} from "./bar"
+import {Match} from "./match"
+import {RoundRobin} from "./RoundRobin"
 
 export class Team {
   bar: Bar

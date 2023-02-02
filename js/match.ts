@@ -1,5 +1,5 @@
-import {Team} from "./team.js"
-import {Week} from "./week.js"
+import {Team} from "./team"
+import {Week} from "./week"
 
 export class Match {
   homeTeam: Team

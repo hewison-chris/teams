@@ -1,4 +1,4 @@
-import {Match} from "./match.js"
+import {Match} from "./match"
 
 export class Week {
   week: number

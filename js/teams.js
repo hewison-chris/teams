@@ -1,14 +1,15 @@
-import { Team } from "./team.js";
-import { random } from "./random.js";
-export class Teams {
-    teams = [];
-    count;
-    bars;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Teams = void 0;
+const team_1 = require("./team");
+const random_1 = require("./random");
+class Teams {
     constructor(count, bars) {
+        this.teams = [];
         this.bars = bars;
         this.count = count;
-        this.teams = bars.bars.map(bar => new Team(bar))
-            .concat(this.bars.bars.slice(0, count - bars.count).map(bar => new Team(bar)));
+        this.teams = bars.bars.map(bar => new team_1.Team(bar))
+            .concat(this.bars.bars.slice(0, count - bars.count).map(bar => new team_1.Team(bar)));
         console.log(`teams = ${this.toString()}`);
     }
     halfCount() {
@@ -50,9 +51,9 @@ export class Teams {
             return null;
         }
         console.log(`Home team ${homeTeam.toString()}: choose from ${teamsToPlay}`);
-        const picked = teamsToPlay[random(teamsToPlay.length)];
+        const picked = teamsToPlay[(0, random_1.random)(teamsToPlay.length)];
         console.log(`Picked away team ${picked.toString()}`);
         return picked;
     }
 }
-//# sourceMappingURL=teams.js.map
+exports.Teams = Teams;

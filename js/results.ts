@@ -1,6 +1,6 @@
-import {Bars} from "./bars.js"
-import {Teams} from "./teams.js"
-import {Week} from "./week.js"
+import {Bars} from "./bars"
+import {Teams} from "./teams"
+import {Week} from "./week"
 
 export class Results {
   bars: Bars

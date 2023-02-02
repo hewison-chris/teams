@@ -1,11 +1,11 @@
-import { Match } from "./match.js";
-import { Week } from "./week.js";
-export class Scheduler {
-    bars;
-    teams;
-    weeks = [];
-    matchTarget;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Scheduler = void 0;
+const match_1 = require("./match");
+const week_1 = require("./week");
+class Scheduler {
     constructor(bars, teams, matchTarget) {
+        this.weeks = [];
         this.bars = bars;
         this.teams = teams;
         this.matchTarget = matchTarget;
@@ -41,7 +41,7 @@ export class Scheduler {
             console.log(`Week ${weekIndex + 1}`);
             let homeTeams = [];
             let awayTeams = [];
-            this.weeks.push(new Week(weekIndex));
+            this.weeks.push(new week_1.Week(weekIndex));
             const homeBars = this.bars.bars.reverse().slice().sort((a, b) => a.weightedCount() - a.weightedCount());
             console.log(`teams: home/away ${this.teams.teams.map(t => "[" + t.id() + ":" + t.homeCount() + "/" + t.awayCount() + "]")}`);
             homeBars.forEach(bar => {
@@ -64,14 +64,14 @@ export class Scheduler {
                             if (anotherAwayTeam !== null) {
                                 homeTeams.push(homeTeam);
                                 awayTeams.push(anotherAwayTeam);
-                                this.weeks[weekIndex].matches.push(new Match(homeTeam, anotherAwayTeam, this.weeks[weekIndex]));
+                                this.weeks[weekIndex].matches.push(new match_1.Match(homeTeam, anotherAwayTeam, this.weeks[weekIndex]));
                             }
                         }
                     }
                     else {
                         homeTeams.push(homeTeam);
                         awayTeams.push(awayTeam);
-                        this.weeks[weekIndex].matches.push(new Match(homeTeam, awayTeam, this.weeks[weekIndex]));
+                        this.weeks[weekIndex].matches.push(new match_1.Match(homeTeam, awayTeam, this.weeks[weekIndex]));
                     }
                 }
             });
@@ -89,4 +89,4 @@ export class Scheduler {
         return true;
     }
 }
-//# sourceMappingURL=scheduler.js.map
+exports.Scheduler = Scheduler;

@@ -1,8 +1,8 @@
-import {Bars} from "./bars.js"
-import {Teams} from "./teams.js"
-import {Match} from "./match.js"
-import {Week} from "./week.js"
-import {Team} from "./team.js"
+import {Bars} from "./bars"
+import {Teams} from "./teams"
+import {Match} from "./match"
+import {Week} from "./week"
+import {Team} from "./team"
 
 export class Scheduler {
   bars: Bars

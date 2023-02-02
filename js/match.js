@@ -1,7 +1,7 @@
-export class Match {
-    homeTeam;
-    awayTeam;
-    week;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Match = void 0;
+class Match {
     constructor(homeTeam, awayTeam, week) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
@@ -12,4 +12,4 @@ export class Match {
         return `${this.awayTeam.id()} at ${this.homeTeam.id()}`;
     }
 }
-//# sourceMappingURL=match.js.map
+exports.Match = Match;

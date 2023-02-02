@@ -1,5 +1,5 @@
-import {random} from "./random.js"
-import {Bar} from "./bar.js"
+import {random} from "./random"
+import {Bar} from "./bar"
 
 export class Bars {
   bars: Bar[] = []

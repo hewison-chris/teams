@@ -1,7 +1,9 @@
-export class Week {
-    week;
-    matches = [];
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Week = void 0;
+class Week {
     constructor(weekIndex) {
+        this.matches = [];
         this.week = weekIndex + 1;
     }
     toString() {
@@ -11,4 +13,4 @@ export class Week {
         return this.week;
     }
 }
-//# sourceMappingURL=week.js.map
+exports.Week = Week;

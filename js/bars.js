@@ -1,12 +1,14 @@
-import { random } from "./random.js";
-import { Bar } from "./bar.js";
-export class Bars {
-    bars = [];
-    count;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Bars = void 0;
+const random_1 = require("./random");
+const bar_1 = require("./bar");
+class Bars {
     constructor(count) {
+        this.bars = [];
         this.count = count;
         this.bars = Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ".slice(0, count))
-            .map(letter => new Bar(letter));
+            .map(letter => new bar_1.Bar(letter));
     }
     toString() {
         return this.bars.map(bar => bar.toString());
@@ -21,7 +23,7 @@ export class Bars {
         return this.bars.filter(bar => !(bar.isOneTeamBar()));
     }
     pickBar() {
-        return this.bars[random(this.count)];
+        return this.bars[(0, random_1.random)(this.count)];
     }
 }
-//# sourceMappingURL=bars.js.map
+exports.Bars = Bars;

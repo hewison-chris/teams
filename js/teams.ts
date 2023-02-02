@@ -1,6 +1,6 @@
-import {Bars} from "./bars.js"
-import {Team} from "./team.js"
-import {random} from "./random.js"
+import {Bars} from "./bars"
+import {Team} from "./team"
+import {random} from "./random"
 
 export class Teams {
   teams: Team[] = []

@@ -1,11 +1,7 @@
-export class Results {
-    bars;
-    teams;
-    weeks;
-    completed;
-    message;
-    error;
-    attempt;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Results = void 0;
+class Results {
     constructor(bars, teams) {
         this.message = "";
         this.error = "";
@@ -16,4 +12,4 @@ export class Results {
         this.weeks = [];
     }
 }
-//# sourceMappingURL=results.js.map
+exports.Results = Results;

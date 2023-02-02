@@ -1,14 +1,14 @@
-import { RoundRobin } from "./RoundRobin.js";
-export class Team {
-    bar;
-    index;
-    roundRobin;
-    matches = [];
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Team = void 0;
+const RoundRobin_1 = require("./RoundRobin");
+class Team {
     constructor(bar) {
+        this.matches = [];
         this.bar = bar;
         bar.addTeam(this);
         this.index = bar.teamCount();
-        this.roundRobin = new RoundRobin(this);
+        this.roundRobin = new RoundRobin_1.RoundRobin(this);
     }
     addTeamsToPlay(teams) {
         this.roundRobin.addTeams(teams);
@@ -53,4 +53,4 @@ export class Team {
         return this.matches.length;
     }
 }
-//# sourceMappingURL=team.js.map
+exports.Team = Team;

@@ -1,9 +1,11 @@
-import { random } from "./random.js";
-export class Bar {
-    name;
-    teams = [];
-    matchCount = 0;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Bar = void 0;
+const random_1 = require("./random");
+class Bar {
     constructor(name) {
+        this.teams = [];
+        this.matchCount = 0;
         this.name = name;
     }
     reset() {
@@ -35,7 +37,7 @@ export class Bar {
         if (chooseFrom.length === 0) {
             return null;
         }
-        return chooseFrom[random(this.teamCount())];
+        return chooseFrom[(0, random_1.random)(this.teamCount())];
     }
     pickOtherHomeTeam(homeTeam, awayTeams, matchTarget) {
         if (this.isOneTeamBar()) {
@@ -52,4 +54,4 @@ export class Bar {
         return chooseFrom[0];
     }
 }
-//# sourceMappingURL=bar.js.map
+exports.Bar = Bar;

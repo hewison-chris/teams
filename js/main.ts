@@ -1,7 +1,7 @@
-import {Results} from "./results.js"
-import {Scheduler} from "./scheduler.js"
-import {Bars} from "./bars.js"
-import {Teams} from "./teams.js"
+import {Results} from "./results"
+import {Scheduler} from "./scheduler"
+import {Bars} from "./bars"
+import {Teams} from "./teams"
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms))
 
@@ -12,26 +12,26 @@ export async function* countDown(counts: number = 3): AsyncGenerator<string> {
     await delay(200)
     count--
   }
-  yield `GO`
+  return `GO`
 }
 
 export async function* schedule(barCount: number, teamCount: number, matchTarget: number,
-                                maxAttempts: number): AsyncGenerator<Results> {
+                                maxAttempts: number = 1): AsyncGenerator<Results> {
   const bars = new Bars(barCount)
   const teams = new Teams(teamCount, bars)
   const results = new Results(bars, teams)
   let done = false
   if (teamCount < barCount) {
     results.error = "There needs to be at least one team per bar!"
-    yield results
+    return results
   }
   if (teamCount > 2 * barCount) {
     results.error = "Only a maximum of two teams per bar is supported!"
-    yield results
+    return results
   }
   if (matchTarget % 2 !== 0) {
     results.error = "Please choose an even number of matches!"
-    yield results
+    return results
   }
   yield results
   const scheduler = new Scheduler(bars, teams, matchTarget)
@@ -58,5 +58,5 @@ export async function* schedule(barCount: number, teamCount: number, matchTarget
     console.log(results.message)
   }
   console.debug("exit")
-  yield results
+  return results
 }

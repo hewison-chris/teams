@@ -1,4 +1,4 @@
-import {Team} from "./team.js"
+import {Team} from "./team"
 
 export class RoundRobin {
   team: Team
@@ -25,7 +25,7 @@ export class RoundRobin {
 
   removeTeam(team: Team) {
     this.teams.splice(this.teams.findIndex(t => t.id() === team.id()), 1)
-    if (this.teams.length === 0) {
+    if (this.completed()) {
       console.log(`Team ${this.team} completed round robin round ${this.round}`)
     }
   }
