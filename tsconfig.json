@@ -1,11 +1,31 @@
 {
   "compilerOptions": {
-    "module": "esnext",
     "target": "esnext",
-    "sourceMap": true,
-    "strict": true
+    // Target ES2020 or higher
+    "module": "nodenext",
+    // Use nodenext module resolution
+    "moduleResolution": "nodenext",
+    // Explicit module resolution strategy
+    "strict": true,
+    // Enable strict type checking
+    "esModuleInterop": true,
+    // For compatibility between CommonJS and ES modules
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    // Output directory
+    "declaration": true,
+    // Generate declaration files for types
+    "sourceMap": true
+    // Generate source maps
   },
+  "include": [
+    "src/**/*",
+    "test/**/*"
+  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "test",
+    "dist"
   ]
 }
